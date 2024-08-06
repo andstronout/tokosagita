@@ -6,7 +6,7 @@ if (!isset($_SESSION['login_pelanggan'])) {
   header("location:login.php");
 }
 
-$sql_transaksi = sql("SELECT * FROM transaksi WHERE id_user='$_SESSION[id_pelanggan]' AND `status`='Selesai'");
+$sql_transaksi = sql("SELECT * FROM transaksi WHERE id_user='$_SESSION[id_pelanggan]' AND `status`='Selesai' ORDER BY id_transaksi DESC");
 include "header.php";
 ?>
 

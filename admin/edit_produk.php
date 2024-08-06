@@ -11,7 +11,6 @@ if (isset($_POST["submit"])) {
   $nama_produk = $_POST["nama_produk"];
   $jenis = $_POST["jenis"];
   $harga_produk = $_POST["harga_produk"];
-  $deskripsi = $_POST["deskripsi"];
   $qty_produk = $_POST["qty_produk"];
 
   $sumber = @$_FILES['produk']['tmp_name'];

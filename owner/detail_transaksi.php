@@ -4,18 +4,38 @@ require "../config.php";
 if (!isset($_SESSION["login_owner"])) {
   header("location:../login.php");
 }
-
-$sql_produk = sql("SELECT * FROM produk");
+$id = $_GET["id"];
+$sql_produk = sql("SELECT * FROM detail_transaksi INNER JOIN produk ON detail_transaksi.id_produk=produk.id_produk WHERE id_transaksi='$id'");
 $no = 1;
+
+$cek = sql("SELECT `status` FROM transaksi WHERE id_transaksi='$id'");
+$hasil = $cek->fetch_assoc();
+
+$potong = $sql_produk->fetch_assoc();
+
+$total_potong = $potong['qty_produk'] - $potong['qty_transaksi'];
+$id_produk = $potong['id_produk'];
+
+if (isset($_POST["submit"])) {
+  $update_transaksi = sql("UPDATE transaksi SET `status`='Sedang Diproses' , no_resi='$_POST[no_resi]' WHERE id_transaksi='$id'");
+  $update_produk = sql("UPDATE produk SET qty_produk=$total_potong WHERE id_produk='$id_produk'");
+  echo "
+        <script>
+        alert('Data berhasil Ditambahkan');
+        document.location.href = 'daftar_transaksi.php';
+        </script>
+        ";
+}
 include "header.php";
 ?>
+
 
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Data Produk</h1>
+    <h1 class="h3 mb-0 text-gray-800">DETAIL BARANG</h1>
   </div>
 
   <!-- Content Row -->
@@ -28,8 +48,6 @@ include "header.php";
             <tr>
               <th width=5%>No</th>
               <th>Nama Produk</th>
-              <th>Jenis</th>
-              <th>Harga Produk</th>
               <th>QTY</th>
             </tr>
           </thead>
@@ -38,15 +56,46 @@ include "header.php";
               <tr>
                 <th class="text-center"><?= $no; ?></th>
                 <th><?= $produk['nama_produk']; ?></th>
-                <th><?= $produk['jenis']; ?></th>
-                <th>Rp. <?= number_format($produk['harga_produk']); ?></th>
-                <th><?= $produk['qty_produk']; ?></th>
+                <th><?= $produk['qty_transaksi']; ?></th>
               </tr>
             <?php
               $no++;
             endforeach ?>
           </tbody>
         </table>
+      </div>
+      <a href="daftar_transaksi.php" class="btn btn-outline-secondary">Halaman Utama</a>
+      <!-- Button trigger modal -->
+      <?php if ($hasil['status'] == 'Belum Diproses') { ?>
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+          Proses Pesanan
+        </button>
+      <?php } ?>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Masukan Nomor Resi Pengiriman</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="" method="post">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="floatingInput" placeholder="Nomor Resi" name="no_resi" required>
+                  <small>Pastikan anda memasukan nomor Resi dengan benar</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" name="submit" class="btn btn-primary">Save changes</button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -60,7 +109,7 @@ include "header.php";
 <footer class="sticky-footer bg-white">
   <div class="container my-auto">
     <div class="copyright text-center my-auto">
-      <span>Copyright &copy; SagitaCollection 2024</span>
+      <span>Copyright &copy; Nadia Ryan Jewelry 2023</span>
     </div>
   </div>
 </footer>
@@ -124,16 +173,16 @@ include "header.php";
       dom: 'Bfrtip',
       buttons: [{
           extend: 'excelHtml5',
-          title: 'Data Produk',
+          title: 'Data Pesanan Barang',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4]
+            columns: [0, 1, 2]
           }
         },
         {
           extend: 'pdfHtml5',
-          title: 'Data Produk',
+          title: 'Data Pesanan Barang',
           exportOptions: {
-            columns: [0, 1, 2, 3, 4]
+            columns: [0, 1, 2]
           }
         }
       ]

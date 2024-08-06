@@ -106,7 +106,25 @@ include "header.php";
 </section>
 
 <!-- Footer Section Begin -->
-<footer class="footer-section">\
+<footer class="footer-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="footer-left">
+                    <div class="footer-logo">
+                        <a href="#">
+                            <h2 class="text-white mt-2">SagitaCollection</h2>
+                        </a>
+                    </div>
+                    <ul>
+                        <li>Address: Kp. Margasari, Curug Kulon, Kec. Curug, Kabupaten Tangerang.</li>
+                        <li>Phone: +62 812 1234 1243</li>
+                        <li>Email: admin@sagita.com</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="copyright-reserved">
         <div class="container">
             <div class="row">
