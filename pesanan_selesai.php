@@ -66,7 +66,7 @@ include "header.php";
           <ul>
             <li><a href="pesanan_saya.php" class="text-dark">Belum Diproses</a></li>
             <li><a href="pesanan_diproses.php" class="text-dark">Sedang Diproses</a></li>
-            <li class="active">Sedang Diproses</li>
+            <li class="active">Selesai Diproses</li>
           </ul>
         </div>
       </div>
@@ -82,7 +82,7 @@ include "header.php";
       foreach ($sql_transaksi as $transaksi) { ?>
         <div class="row" style="width: 100%;">
           <div class="col-10">
-            <h5>Pesanan : <?= $transaksi['id_pesanan']; ?> <small> - Nomor resi : <?= $transaksi['no_resi']; ?></small></h5>
+            <h5>Pesanan : <?= $transaksi['id_pesanan']; ?> <small> - Nomor resi : <?= $transaksi['no_resi']; ?> ( <?= $transaksi['tanggal_transaksi']; ?> )</small></h5>
           </div>
         </div>
         <?php

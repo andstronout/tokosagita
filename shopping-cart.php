@@ -73,7 +73,11 @@ include "header.php";
                                 <li class="subtotal">Subtotal <span>Rp. <?= number_format($jumlah_bayar); ?>,-</span></li>
                                 <li class="cart-total">Total <span>Rp. <?= number_format($jumlah_bayar); ?>,-</span></li>
                             </ul>
-                            <a href="check-out.php" class="proceed-btn">PROCEED TO CHECK OUT</a>
+                            <?php if ($jumlah_bayar > 0): ?>
+                                <a href="check-out.php" class="proceed-btn">PROCEED TO CHECK OUT</a>
+                            <?php else: ?>
+                                <a href="#" class="proceed-btn disabled" onclick="return false;" style="background-color: #ccc; cursor: not-allowed;">PROCEED TO CHECK OUT</a>
+                            <?php endif ?>
                         </div>
                     </div>
                 </div>
