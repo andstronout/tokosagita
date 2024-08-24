@@ -163,46 +163,59 @@ function ubahPassword()
 function cart()
 {
   $conn = koneksi();
-  $sql_produk = $conn->query("SELECT * FROM produk");
-  $limit = $sql_produk->fetch_assoc();
 
   if (isset($_POST["submit"])) {
     if (!isset($_SESSION['login_pelanggan'])) {
       echo "
-          <script>
-          alert('Anda belum login. Silahkan login terlebih dahulu!');
-          document.location.href = 'login.php';
-          </script>
-          ";
-    } elseif ($limit['qty_produk'] < $_POST["qty_cart"]) {
+            <script>
+            alert('Anda belum login. Silahkan login terlebih dahulu!');
+            document.location.href = 'login.php';
+            </script>
+            ";
+      return;
+    }
+
+    // Ambil produk yang dipilih berdasarkan id_produk
+    $id_produk = $_POST["id_produk"];
+    $sql_produk = $conn->query("SELECT * FROM produk WHERE id_produk = '$id_produk'");
+    $produk = $sql_produk->fetch_assoc();
+
+    // Periksa apakah stok produk mencukupi
+    if ($produk['qty_produk'] < $_POST["qty_cart"]) {
       echo "
-          <script>
-          alert('Maaf, Pesanan anda melewati jumlah stok kami');
-          document.location.href = 'index.php';
-          </script>
-          ";
+            <script>
+            alert('Maaf, Pesanan anda melewati jumlah stok kami');
+            document.location.href = 'index.php';
+            </script>
+            ";
+      return;
+    }
+
+    // Lanjutkan untuk menambahkan produk ke dalam keranjang
+    $sql_cart = $conn->query("SELECT * FROM cart WHERE id_user='$_SESSION[id_pelanggan]' AND id_produk='$id_produk'");
+    $cart = $sql_cart->fetch_assoc();
+
+    if ($sql_cart->num_rows > 0) {
+      // Update jumlah produk di keranjang jika produk sudah ada
+      $tambah = $cart['qty_cart'] + $_POST["qty_cart"];
+      $update_cart = $conn->query("UPDATE cart SET qty_cart='$tambah' WHERE id_produk='$id_produk'");
+      echo "
+            <script>
+            alert('Produk Ditambahkan, Check keranjangan belanja untuk proses checkout');
+            document.location.href = 'index.php';
+            </script>
+            ";
+      return $update_cart;
     } else {
-      $sql_cart = $conn->query("SELECT * FROM cart WHERE id_user='$_SESSION[id_pelanggan]' AND id_produk='$_POST[id_produk]'");
-      $cart = $sql_cart->fetch_assoc();
-      if ($sql_cart->num_rows > 0) {
-        $tambah = $cart['qty_cart'] + $_POST["qty_cart"];
-        $update_cart = $conn->query("UPDATE cart SET qty_cart='$tambah' WHERE id_produk='$_POST[id_produk]'");
-        echo "
-          <script>
-          alert('Produk Ditambahkan, Check keranjangan belanja untuk proses checkout');
-          document.location.href = 'index.php';
-          </script>
-          ";
-        return $update_cart;
-      } else {
-        $tambah = $conn->query("INSERT INTO cart (id_user,id_produk,qty_cart) VALUES ('$_SESSION[id_pelanggan]','$_POST[id_produk]','$_POST[qty_cart]')");
-        echo "
-        <script>
-        alert('Produk Ditambahkan, Check keranjangan belanja untuk proses checkout');
-        document.location.href = 'index.php';
-        </script>
-        ";
-      }
+      // Tambahkan produk baru ke keranjang
+      $tambah = $conn->query("INSERT INTO cart (id_user,id_produk,qty_cart) VALUES ('$_SESSION[id_pelanggan]', '$id_produk', '$_POST[qty_cart]')");
+      echo "
+            <script>
+            alert('Produk Ditambahkan, Check keranjangan belanja untuk proses checkout');
+            document.location.href = 'index.php';
+            </script>
+            ";
+      return $tambah;
     }
   }
 }

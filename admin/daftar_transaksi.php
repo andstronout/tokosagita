@@ -31,8 +31,8 @@ include "header.php";
           <label for="">Ke Tanggal</label>
           <input type="date" class="form-control" name="t_akhir" required>
         </div>
-        <div class="col-auto mt-4">
-          <button type="submit" class="btn btn-secondary btn-sm" name="simpan">Simpan</button>
+        <div class="col-auto mt-4" style="padding-top: 10px;">
+          <button type="submit" class="btn btn-secondary btn-sm" name="simpan">Cari</button>
           <a href="daftar_transaksi.php" class="btn btn-outline-secondary btn-sm">Reset</a>
         </div>
       </form>

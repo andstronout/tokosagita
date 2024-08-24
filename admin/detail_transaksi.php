@@ -70,6 +70,7 @@ include "header.php";
         <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
           Proses Pesanan
         </button>
+        <a href="cancel_order.php?id=<?= $id; ?>" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">Cancel Pesanan</a>
       <?php } ?>
 
       <!-- Modal -->

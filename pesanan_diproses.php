@@ -67,6 +67,7 @@ include "header.php";
             <li><a href="pesanan_saya.php" class="text-dark">Belum Diproses</a></li>
             <li class="active">Sedang Diproses</li>
             <li><a href="pesanan_selesai.php" class="text-dark">Selesai Diproses</a></li>
+            <li><a href="pesanan_cancel.php" class="text-dark">Cancel Diproses</a></li>
           </ul>
         </div>
       </div>

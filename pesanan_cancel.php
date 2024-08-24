@@ -6,7 +6,7 @@ if (!isset($_SESSION['login_pelanggan'])) {
   header("location:login.php");
 }
 
-$sql_transaksi = sql("SELECT * FROM transaksi WHERE id_user='$_SESSION[id_pelanggan]' AND `status`='Selesai' ORDER BY id_transaksi DESC");
+$sql_transaksi = sql("SELECT * FROM transaksi WHERE id_user='$_SESSION[id_pelanggan]' AND `status`='Cancel' ORDER BY id_transaksi DESC");
 include "header.php";
 ?>
 
@@ -49,7 +49,7 @@ include "header.php";
       <div class="col-lg-12">
         <div class="breadcrumb-text">
           <a href="index.php"><i class="fa fa-home"></i> Home</a>
-          <span>Pesanan Selesai</span>
+          <span>Pesanan Diproses</span>
         </div>
       </div>
     </div>
@@ -66,8 +66,8 @@ include "header.php";
           <ul>
             <li><a href="pesanan_saya.php" class="text-dark">Belum Diproses</a></li>
             <li><a href="pesanan_diproses.php" class="text-dark">Sedang Diproses</a></li>
-            <li class="active">Selesai Diproses</li>
-            <li><a href="pesanan_cancel.php" class="text-dark">Cancel Diproses</a></li>
+            <li><a href="pesanan_selesai.php" class="text-dark">Selesai Diproses</a></li>
+            <li class="active">Cancel Diproses</li>
           </ul>
         </div>
       </div>
@@ -83,11 +83,11 @@ include "header.php";
       foreach ($sql_transaksi as $transaksi) { ?>
         <div class="row" style="width: 100%;">
           <div class="col-10">
-            <h5>Pesanan : <?= $transaksi['id_pesanan']; ?> <small> - Nomor resi : <?= $transaksi['no_resi']; ?> ( <?= $transaksi['tanggal_transaksi']; ?> )</small></h5>
+            <h5>Pesanan : <?= $transaksi['id_pesanan']; ?> <small> - ( <?= $transaksi['tanggal_transaksi']; ?> )</small></h5>
           </div>
         </div>
         <?php
-        $sql_detail = sql("SELECT * FROM detail_transaksi INNER JOIN transaksi ON detail_transaksi.id_transaksi=transaksi.id_transaksi INNER JOIN produk ON detail_transaksi.id_produk=produk.id_produk WHERE id_user='$_SESSION[id_pelanggan]' AND `status`='Selesai' AND transaksi.id_transaksi='$transaksi[id_transaksi]'");
+        $sql_detail = sql("SELECT * FROM detail_transaksi INNER JOIN transaksi ON detail_transaksi.id_transaksi=transaksi.id_transaksi INNER JOIN produk ON detail_transaksi.id_produk=produk.id_produk WHERE id_user='$_SESSION[id_pelanggan]' AND `status`='Cancel' AND transaksi.id_transaksi='$transaksi[id_transaksi]'");
         foreach ($sql_detail as $detail) { ?>
           <div class="row border-top border-bottom main d-flex justify-content-center align-items-center mx-4 mb-5">
             <div class="col-2"><img class="img-fluid" src="img/produk/<?= $detail['gambar_produk']; ?>"></div>
