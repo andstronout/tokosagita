@@ -50,6 +50,7 @@ include "header.php";
                     <div class="col-lg-5">
                         <span>Bag,kids</span>
                         <h1>Black friday</h1>
+                        <h5 class="mb-2">Free Ongkir JABODETABEK</h5>
                         <a href="#shop" class="primary-btn">Shop Now</a>
                     </div>
                 </div>

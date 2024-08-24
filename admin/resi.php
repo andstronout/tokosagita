@@ -75,11 +75,10 @@ $no = 1;
     <?php if ($transaksi = $sql_transaksi->fetch_assoc()) { ?>
       <div class="row mt-4">
         <div class="col-md-6">
-          <h5>Nomor Resi: <strong>#<?= $id; ?></strong></h5>
           <h5>Tanggal: <strong><?= date("d F Y"); ?></strong></h5>
+          <h5>Nama Pelanggan: <strong><?= $transaksi['nama_user']; ?></strong></h5>
         </div>
         <div class="col-md-6 text-md-end">
-          <h5>Nama Pelanggan: <strong><?= $transaksi['nama_user']; ?></strong></h5>
           <h5>Nomor Handphone: <strong><?= $transaksi['nomor_hp']; ?></strong></h5>
           <h5>Alamat: <strong><?= $transaksi['alamat']; ?></strong></h5>
         </div>
@@ -94,8 +93,6 @@ $no = 1;
               <th>No</th>
               <th>Nama Produk</th>
               <th>Kuantitas</th>
-              <th>Harga Satuan</th>
-              <th>Total Harga</th>
             </tr>
           </thead>
           <tbody>
@@ -109,21 +106,10 @@ $no = 1;
                 <td><?= $no++; ?></td>
                 <td><?= $produk['nama_produk']; ?></td>
                 <td><?= $produk['qty_transaksi']; ?></td>
-                <td>Rp. <?= number_format($produk['harga_produk']); ?></td>
-                <td>Rp. <?= number_format($subtotal); ?></td>
               </tr>
             <?php endforeach; ?>
           </tbody>
         </table>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6">
-        <h5><strong>Total:</strong></h5>
-      </div>
-      <div class="col-md-6 text-end">
-        <h5><strong>Rp. <?= number_format($total_bayar); ?></strong></h5>
       </div>
     </div>
 
@@ -134,7 +120,7 @@ $no = 1;
     </div>
 
     <div class="text-center no-print print-button">
-      <button class="btn btn-primary" onclick="window.print()">Print Resi</button>
+      <button class="btn btn-primary" onclick="window.print()">Print Transaksi</button>
     </div>
   </div>
 
