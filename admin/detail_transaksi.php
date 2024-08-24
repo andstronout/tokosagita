@@ -71,6 +71,7 @@ include "header.php";
           Proses Pesanan
         </button>
         <a href="cancel_order.php?id=<?= $id; ?>" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">Cancel Pesanan</a>
+        <a href="resi.php?id=<?= $id; ?>" class="btn btn-outline-info">Cetak Resi</a>
       <?php } ?>
 
       <!-- Modal -->
