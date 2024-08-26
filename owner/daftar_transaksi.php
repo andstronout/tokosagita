@@ -6,6 +6,7 @@ if (!isset($_SESSION["login_owner"])) {
 }
 
 $no = 1;
+$total_bayar = 0; // Inisialisasi total bayar
 include "header.php";
 ?>
 
@@ -36,6 +37,10 @@ include "header.php";
           <a href="daftar_transaksi.php" class="btn btn-outline-secondary btn-sm">Reset</a>
         </div>
       </form>
+      <div class="mt-3">
+        <a class="btn btn-sm btn-info" href="export_pdf.php">Print PDF</a>
+        <a class="btn btn-sm btn-info" href="export_excel.php">Print Excel</a>
+      </div>
       <?php
       if (isset($_POST['simpan'])) {
         // var_dump($_POST["t_awal"], $_POST["t_akhir"]);
@@ -52,16 +57,16 @@ include "header.php";
       ?>
       <br>
       <div class="table-responsive">
-        <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
+        <table class="table table-bordered" width="100%" cellspacing="0">
           <thead>
             <tr>
               <th width=5%>No</th>
               <th>Nomor Transaksi</th>
               <th>Nama Pelanggan</th>
               <th>Tanggal Transaksi</th>
-              <th>Total Bayar</th>
               <th>Resi Pengiriman</th>
               <th>Status</th>
+              <th>Total Bayar</th>
             </tr>
           </thead>
           <tbody>
@@ -71,7 +76,6 @@ include "header.php";
                 <th><?= $transaksi['id_pesanan']; ?></th>
                 <th><?= $transaksi['nama_user']; ?></th>
                 <th><?= $transaksi['tanggal_transaksi']; ?></th>
-                <th>Rp. <?= number_format($transaksi['total_transaksi']); ?></th>
                 <th>
                   <?php if ($transaksi['no_resi'] == NULL) {
                     echo "Belum ada resi";
@@ -81,10 +85,16 @@ include "header.php";
                   ?>
                 </th>
                 <th><?= $transaksi['status']; ?></th>
+                <th>Rp. <?= number_format($transaksi['total_transaksi']); ?></th>
               </tr>
             <?php
               $no++;
+              $total_bayar += $transaksi['total_transaksi']; // Hitung total bayar
             endforeach ?>
+            <tr>
+              <th colspan="6" class="text-center"><strong>TOTAL BAYAR</strong></th>
+              <th><strong>Rp. <?= number_format($total_bayar); ?></strong></th>
+            </tr>
           </tbody>
         </table>
       </div>

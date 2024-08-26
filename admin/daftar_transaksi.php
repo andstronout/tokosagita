@@ -71,7 +71,7 @@ include "header.php";
               <tr>
                 <th class="text-center"><?= $no; ?></th>
                 <th><?= $transaksi['id_pesanan']; ?></th>
-                <th><?= $transaksi['nama_user']; ?></th>
+                <th><a href="lihat_pelanggan.php?id=<?= $transaksi['id_user']; ?>"><?= $transaksi['nama_user']; ?></a></th>
                 <th><?= $transaksi['tanggal_transaksi']; ?></th>
                 <th>Rp. <?= number_format($transaksi['total_transaksi']); ?></th>
                 <th>

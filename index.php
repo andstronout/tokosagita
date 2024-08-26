@@ -77,10 +77,10 @@ include "header.php";
                                         <img src="img/produk/<?= $produk['gambar_produk']; ?>" alt="">
                                     </div>
                                     <div class="pi-text">
-                                        <div class="catagory-name"><?= $produk['jenis']; ?></div>
                                         <a href="#" class="mb-2">
                                             <h5><?= $produk['nama_produk']; ?></h5>
                                         </a>
+                                        <div class="catagory-name"><?= $produk['jenis']; ?></div>
                                         <div class="product-price mb-2">
                                             Rp. <?= number_format($produk['harga_produk']); ?> ,-
                                         </div>

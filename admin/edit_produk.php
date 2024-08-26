@@ -9,7 +9,8 @@ if (!isset($_SESSION["login_admin"])) {
 }
 if (isset($_POST["submit"])) {
   $nama_produk = $_POST["nama_produk"];
-  $jenis = $_POST["jenis"];
+  $isijenis = $_POST["jenis"];
+  $jenis = nl2br(htmlspecialchars($isijenis));
   $harga_produk = $_POST["harga_produk"];
   $qty_produk = $_POST["qty_produk"];
 
@@ -75,14 +76,8 @@ include "header.php";
           <input type="text" class="form-control" id="nama_produk" name="nama_produk" placeholder="Nama Produk" required value="<?= $produk['nama_produk']; ?>">
         </div>
         <div class="mb-3">
-          <label for="jenis" class="form-label">Jenis Perhiasan</label>
-          <select class="form-select" name="jenis" required>
-            <option selected value="<?= $produk['jenis']; ?>"><?= $produk['jenis']; ?></option>
-            <option value="Towel">Towel</option>
-            <option value="Jaket">Jaket</option>
-            <option value="Celana">Celana</option>
-            <option value="T-shirt">T-shirt</option>
-          </select>
+          <label for="jenis" class="form-label">Deskripsi Barang</label>
+          <textarea class="form-control" id="deskripsi" name="jenis" rows="3" required><?= $produk['jenis']; ?></textarea>
         </div>
         <div class="mb-3">
           <label for="harga_produk" class="form-label">Harga Produk</label>
