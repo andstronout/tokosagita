@@ -95,6 +95,7 @@ include "header.php";
                                                 <button type="submit" name="submit" class="btn btn-sm btn-info">Add to cart</button>
                                             <?php } ?>
                                         </form>
+                                        <div class="catagory-name mt-2"><i>Sisa Stock : <?= $produk['qty_produk']; ?></i></div>
                                     </div>
                                 </div>
                             </div>
