@@ -3,7 +3,7 @@ session_start();
 require "../config.php";
 require '../fpdf/fpdf.php'; // Pastikan file FPDF ada
 
-if (!isset($_SESSION["login_owner"])) {
+if (!isset($_SESSION["login_admin"])) {
   header("location:../login.php");
   exit;
 }

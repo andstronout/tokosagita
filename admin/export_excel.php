@@ -2,7 +2,7 @@
 session_start();
 require "../config.php";
 
-if (!isset($_SESSION["login_owner"])) {
+if (!isset($_SESSION["login_admin"])) {
   header("location:../login.php");
 }
 

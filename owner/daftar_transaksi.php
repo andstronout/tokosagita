@@ -8,8 +8,29 @@ if (!isset($_SESSION["login_owner"])) {
 $no = 1;
 $total_bayar = 0; // Inisialisasi total bayar
 include "header.php";
-?>
 
+// Cek jika reset ditekan
+if (isset($_GET['reset'])) {
+  // Hapus session tanggal
+  unset($_SESSION["awal"]);
+  unset($_SESSION["akhir"]);
+}
+
+// Proses filter atau tampilkan semua data
+if (isset($_POST['simpan'])) {
+  $_SESSION["awal"] = $_POST["t_awal"];
+  $_SESSION["akhir"] = $_POST["t_akhir"];
+  $sql_produk = sql("SELECT * FROM transaksi 
+            INNER JOIN user ON transaksi.id_user=user.id_user 
+            WHERE transaksi.tanggal_transaksi BETWEEN '$_SESSION[awal]' AND '$_SESSION[akhir]'
+            ORDER BY transaksi.tanggal_transaksi");
+} else {
+  // Tampilkan semua data jika session tanggal kosong
+  $sql_produk = sql("SELECT * FROM transaksi 
+            INNER JOIN user ON transaksi.id_user=user.id_user 
+            ORDER BY `transaksi`.`id_transaksi` DESC");
+}
+?>
 
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -34,27 +55,14 @@ include "header.php";
         </div>
         <div class="col-auto mt-4">
           <button type="submit" class="btn btn-secondary btn-sm" name="simpan">Simpan</button>
-          <a href="daftar_transaksi.php" class="btn btn-outline-secondary btn-sm">Reset</a>
+          <a href="daftar_transaksi.php?reset=true" class="btn btn-outline-secondary btn-sm">Reset</a>
         </div>
       </form>
       <div class="mt-3">
         <a class="btn btn-sm btn-info" href="export_pdf.php">Print PDF</a>
         <a class="btn btn-sm btn-info" href="export_excel.php">Print Excel</a>
       </div>
-      <?php
-      if (isset($_POST['simpan'])) {
-        // var_dump($_POST["t_awal"], $_POST["t_akhir"]);
-        $_SESSION["awal"] = $_POST["t_awal"];
-        $_SESSION["akhir"] = $_POST["t_akhir"];
-        $sql_produk = sql("SELECT * FROM transaksi 
-                INNER JOIN user ON transaksi.id_user=user.id_user 
-                WHERE transaksi.tanggal_transaksi BETWEEN '$_SESSION[awal]' AND '$_SESSION[akhir]'
-                ORDER BY transaksi.tanggal_transaksi
-                ");
-      } else {
-        $sql_produk = sql("SELECT * FROM transaksi INNER JOIN user ON transaksi.id_user=user.id_user ORDER BY `transaksi`.`id_transaksi` DESC");
-      }
-      ?>
+
       <br>
       <div class="table-responsive">
         <table class="table table-bordered" width="100%" cellspacing="0">
@@ -103,9 +111,6 @@ include "header.php";
 </div>
 <!-- /.container-fluid -->
 
-</div>
-<!-- End of Main Content -->
-
 <!-- Footer -->
 <footer class="sticky-footer bg-white">
   <div class="container my-auto">
@@ -116,13 +121,10 @@ include "header.php";
 </footer>
 <!-- End of Footer -->
 
-</div>
 <!-- End of Content Wrapper -->
-
 </div>
-<!-- End of Page Wrapper -->
 
-<!-- Scroll to Top Button-->
+<!-- End of Page Wrapper -->
 <a class="scroll-to-top rounded" href="#page-top">
   <i class="fas fa-angle-up"></i>
 </a>
@@ -145,7 +147,6 @@ include "header.php";
     </div>
   </div>
 </div>
-
 
 <!-- Bootstrap core JavaScript-->
 <script src="../sbadmin/vendor/jquery/jquery.min.js"></script>

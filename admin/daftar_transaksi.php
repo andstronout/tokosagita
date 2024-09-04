@@ -6,9 +6,31 @@ if (!isset($_SESSION["login_admin"])) {
 }
 
 $no = 1;
+$total_bayar = 0; // Inisialisasi total bayar
 include "header.php";
-?>
 
+// Cek jika reset ditekan
+if (isset($_GET['reset'])) {
+  // Hapus session tanggal
+  unset($_SESSION["awal"]);
+  unset($_SESSION["akhir"]);
+}
+
+// Proses filter atau tampilkan semua data
+if (isset($_POST['simpan'])) {
+  $_SESSION["awal"] = $_POST["t_awal"];
+  $_SESSION["akhir"] = $_POST["t_akhir"];
+  $sql_produk = sql("SELECT * FROM transaksi 
+            INNER JOIN user ON transaksi.id_user=user.id_user 
+            WHERE transaksi.tanggal_transaksi BETWEEN '$_SESSION[awal]' AND '$_SESSION[akhir]'
+            ORDER BY transaksi.tanggal_transaksi");
+} else {
+  // Tampilkan semua data jika session tanggal kosong
+  $sql_produk = sql("SELECT * FROM transaksi 
+            INNER JOIN user ON transaksi.id_user=user.id_user 
+            ORDER BY `transaksi`.`id_transaksi` DESC");
+}
+?>
 
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -31,39 +53,30 @@ include "header.php";
           <label for="">Ke Tanggal</label>
           <input type="date" class="form-control" name="t_akhir" required>
         </div>
-        <div class="col-auto mt-4" style="padding-top: 10px;">
-          <button type="submit" class="btn btn-secondary btn-sm" name="simpan">Cari</button>
-          <a href="daftar_transaksi.php" class="btn btn-outline-secondary btn-sm">Reset</a>
+        <div class="col-auto mt-4">
+          <button type="submit" class="btn btn-secondary btn-sm" name="simpan">Simpan</button>
+          <a href="daftar_transaksi.php?reset=true" class="btn btn-outline-secondary btn-sm">Reset</a>
         </div>
       </form>
-      <?php
-      if (isset($_POST['simpan'])) {
-        // var_dump($_POST["t_awal"], $_POST["t_akhir"]);
-        $_SESSION["awal"] = $_POST["t_awal"];
-        $_SESSION["akhir"] = $_POST["t_akhir"];
-        $sql_produk = sql("SELECT * FROM transaksi 
-                INNER JOIN user ON transaksi.id_user=user.id_user 
-                WHERE transaksi.tanggal_transaksi BETWEEN '$_SESSION[awal]' AND '$_SESSION[akhir]'
-                ORDER BY transaksi.tanggal_transaksi
-                ");
-      } else {
-        $sql_produk = sql("SELECT * FROM transaksi INNER JOIN user ON transaksi.id_user=user.id_user ORDER BY `transaksi`.`id_transaksi` DESC");
-      }
-      ?>
+      <div class="mt-3">
+        <a class="btn btn-sm btn-info" href="export_pdf.php">Print PDF</a>
+        <a class="btn btn-sm btn-info" href="export_excel.php">Print Excel</a>
+      </div>
+
       <br>
       <div class="table-responsive">
-        <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
+        <table class="table table-bordered" width="100%" cellspacing="0">
           <thead>
             <tr>
               <th width=5%>No</th>
               <th>Nomor Transaksi</th>
               <th>Nama Pelanggan</th>
               <th>Tanggal Transaksi</th>
-              <th>Total Bayar</th>
               <th>Resi Pengiriman</th>
               <th>Bukti Bayar</th>
               <th>Status</th>
               <th width=14% class="text-center">Aksi</th>
+              <th>Total Bayar</th>
             </tr>
           </thead>
           <tbody>
@@ -73,7 +86,6 @@ include "header.php";
                 <th><?= $transaksi['id_pesanan']; ?></th>
                 <th><a href="lihat_pelanggan.php?id=<?= $transaksi['id_user']; ?>"><?= $transaksi['nama_user']; ?></a></th>
                 <th><?= $transaksi['tanggal_transaksi']; ?></th>
-                <th>Rp. <?= number_format($transaksi['total_transaksi']); ?></th>
                 <th>
                   <?php if ($transaksi['no_resi'] == NULL) {
                     echo "Belum ada resi";
@@ -122,10 +134,16 @@ include "header.php";
                     </a>
                   <?php } ?>
                 </td>
+                <th>Rp. <?= number_format($transaksi['total_transaksi']); ?></th>
               </tr>
             <?php
               $no++;
+              $total_bayar += $transaksi['total_transaksi']; // Hitung total bayar
             endforeach ?>
+            <tr>
+              <th colspan="8" class="text-center"><strong>TOTAL BAYAR</strong></th>
+              <th><strong>Rp. <?= number_format($total_bayar); ?></strong></th>
+            </tr>
           </tbody>
         </table>
       </div>
